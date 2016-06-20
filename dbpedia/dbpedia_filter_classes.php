@@ -4,18 +4,16 @@
  * to the juridical field.
  */
 
-// more
-$aBasicClasses = array(
+include('../../templates/php/utilities/utilities.php');
+
+$classes = array(
 	"yago:Lawyer110249950",
 	"yago:Scholar110557854",
 	"yago:Politician110451263",
 	"yago:HarvardLawSchoolAlumni",
 	"yago:AmericanPoliticalTheorists",
 	"yago:LawClerksOfTheSupremeCourtOfTheUnitedStates",
-	"yago:YaleLawSchoolAlumni"
-);
-
-$aExtendedClasses = array(
+	"yago:YaleLawSchoolAlumni",
 	"yago:Alumnus109786338",
 	"yago:Professional110480253",
 	"dbo:Scientist",
@@ -23,48 +21,34 @@ $aExtendedClasses = array(
 	"yago:Theorist110706812"
 );
 
-$sBasicTableField = "BasicClass";
-$sExtendedTableField = "ExtendedClass";
+$sparql_endpoint = "http://dbpedia.org/sparql?query=";
 
-$sCurrentTableField = $sExtendedTableField;
-$aCurrentClasses = $aExtendedClasses;
-
-// verifico che la risorsa $sResource appartenga alle classi passate come parametro in $aBasicClasses
-function fCheckClasses($sResource, $aClasses)
-{
-	$sSPARQLEndpoint = "http://dbpedia.org/sparql?query=";
-	$sQuery = "ask where {<".$sResource."> a ?type . FILTER(?type IN (";
-
-	foreach($aClasses as $sClass)
-		$sQuery .= $sClass.",";
-	// rimuovo la virgola finale e codifico l'url
-	$sQuery = urlencode(substr($sQuery, 0, strlen($sQuery)-1)."))}");
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $sSPARQLEndpoint.$sQuery);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	$response = curl_exec($ch);
-	
-	return $response;
-}
-
-$oConn = mysqli_connect("localhost", "root", "", "DoGi");
-
-if (!$oConn) {
-    echo "Error: Unable to connect to MySQL." . PHP_EOL;
-    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-    exit;
-}
-
-$oResult = mysqli_query($oConn, "SELECT * FROM Person");
-if($oResult != false && mysqli_num_rows($oResult) > 0)
-	while($aRow = mysqli_fetch_assoc($oResult))
+// connect to the db to take the urls to be checked
+$conn = mysqlconnect("root", NULL, "DoGi");
+$qr = mysqli_query($conn, "SELECT * FROM tabDBPedia WHERE Filtered = 'TOBECHECKED'");
+if($qr != false && mysqli_num_rows($qr) > 0)
+	while($row = mysqli_fetch_assoc($qr))
 	{
-		$sResource = $aRow['DBpedia'];
-		$bResult = fCheckClasses($sResource, $aCurrentClasses);
-		echo $sResource." ".$bResult."\n";
-		mysqli_query($oConn, "UPDATE Person SET $sCurrentTableField=$bResult WHERE DBpedia='".$sResource."'");
+		$dbpedia_url = $row['DBpediaURL'];
+		echo $dbpedia_url."\n";
+		// check whether the person belongs to the given classes
+		$query = "ask where {<".$dbpedia_url."> a ?type . FILTER(?type IN (";
+		
+		foreach($classes as $class)
+			$query .= $class.",";
+		// remove the final comma and code the url
+		$query = urlencode(substr($query, 0, strlen($query)-1)."))}");
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $sparql_endpoint.$query);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$response = curl_exec($ch);
+		
+		$filtered = "NO";
+		if($response == "true"){
+			$filtered = "YES"; echo "YES\n";}
+		mysqli_query($conn, "UPDATE tabDBpedia SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
 	}
-mysqli_close($oConn);
+mysqli_close($conn);
 
 ?>
