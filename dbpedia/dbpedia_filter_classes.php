@@ -45,8 +45,8 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		$response = curl_exec($ch);
 		
 		$filtered = "NO";
-		if($response == "true"){
-			$filtered = "YES"; echo "YES\n";}
+		if($response == "true")
+			$filtered = "YES"; 
 		mysqli_query($conn, "UPDATE tabDBpedia SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
 	}
 mysqli_close($conn);
