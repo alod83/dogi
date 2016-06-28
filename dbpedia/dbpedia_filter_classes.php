@@ -4,7 +4,18 @@
  * to the juridical field.
  */
 
+// These scripts are contained in the repository templates (in a separate Git)
 include('../../templates/php/utilities/utilities.php');
+
+function print_help()
+{
+	echo "dbpedia_filter_classes.php\n";
+	echo "-n new database\n";
+}
+// select from command line the two databases to match
+$input = get_input("n:");
+
+$new_db = $input['n'];
 
 $classes = array(
 	"yago:Lawyer110249950",
@@ -24,7 +35,7 @@ $classes = array(
 $sparql_endpoint = "http://dbpedia.org/sparql?query=";
 
 // connect to the db to take the urls to be checked
-$conn = mysqlconnect("root", NULL, "DoGi");
+$conn = mysqlconnect("root", NULL, $new_db);
 $qr = mysqli_query($conn, "SELECT * FROM tabDBPedia WHERE Filtered = 'TOBECHECKED'");
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))

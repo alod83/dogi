@@ -4,28 +4,46 @@
 include('../../templates/php/utilities/remote.php');
 include('../../templates/php/utilities/utilities.php');
 
+function print_help()
+{
+	echo "dbpedia_extract_urls.php\n";
+	echo "-n new database\n";
+	echo "-o old database\n";
+}
+// select from command line the two databases to match
+$input = get_input("n:o:");
+
+$new_db = $input['n'];
+$old_db = $input['o'];
+
 // DBpedia basic url
 $dbpedia_url = "http://dbpedia.org/resource/";
 // connect to the database tabResponsabilita to extract names
-$conn = mysqlconnect("root", NULL, "DoGi");
-$qr = mysqli_query($conn, "SELECT * FROM tabResponsabilita WHERE checkDBpedia = 0");
+
+$conn = mysqlconnect("root", NULL);
+
+// retrieve new IDs
+$query = "SELECT * FROM $new_db.tabResponsabilita AS new WHERE new.IDResponsabilita > 
+(SELECT MAX(IDResponsabilita) FROM $old_db.tabResponsabilita) AND new.IDResponsabilita NOT IN 
+(SELECT IDResponsabilita FROM $new_db.tabDBpedia)";
+$qr = mysqli_query($conn, $query);
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))
 	{
 		// search if the DBpedia page (name_surname) exists
 		$url = $dbpedia_url.str_replace(" ", "_",$row['SecondoElemento']."_".$row['PrimoElemento']);
 		$id = $row['IDResponsabilita'];
-			
+		echo "IDResponsabilita=$id\n";
+		
 		$result = connect_curl($url);
 		$http_response = intval($result['http_info']['http_code']);
 		if($http_response == 200) // the url exists
 		{
+			echo "Found URL $url\n";
 			// if it exists store the result in a new table, called tabDBpedia (id, URL)
-			mysqli_query($conn,"INSERT INTO tabDBpedia(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
+			mysqli_query($conn,"INSERT INTO $new_db.tabDBpedia(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
 		}
-		// update the field checkDBPedia
-		mysqli_query($conn,"UPDATE tabResponsabilita SET checkDBpedia = '1' WHERE IDResponsabilita = '$id'");
 	}
-
+mysqli_close($conn);
 
 ?>
