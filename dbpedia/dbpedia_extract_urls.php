@@ -3,13 +3,8 @@
 // These scripts are contained in the repository templates (in a separate Git)
 include('../../templates/php/utilities/remote.php');
 include('../../templates/php/utilities/utilities.php');
+include('../utilities/utilities.php');
 
-function print_help()
-{
-	echo "dbpedia_extract_urls.php\n";
-	echo "-n new database\n";
-	echo "-o old database\n";
-}
 // select from command line the two databases to match
 $input = get_input("n:o:");
 
