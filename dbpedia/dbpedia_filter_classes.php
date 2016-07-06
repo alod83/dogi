@@ -13,7 +13,7 @@ function print_help()
 	echo "-n new database\n";
 }
 // select from command line the two databases to match
-$input = get_input("n:");
+$input = get_input("n:", "u:p:");
 
 $new_db = $input['n'];
 
@@ -34,9 +34,9 @@ $classes = array(
 
 $sparql_endpoint = "http://dbpedia.org/sparql?query=";
 
+include('../utilities/config.php');
 // connect to the db to take the urls to be checked
-$conn = mysqlconnect("root", NULL, $new_db);
-$qr = mysqli_query($conn, "SELECT * FROM tabDBPedia WHERE Filtered = 'TOBECHECKED'");
+$qr = mysqli_query($conn, "SELECT * FROM $new_db.tabDBPedia WHERE Filtered = 'TOBECHECKED'");
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))
 	{

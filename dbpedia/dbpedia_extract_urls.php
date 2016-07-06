@@ -6,16 +6,15 @@ include('../../templates/php/utilities/utilities.php');
 include('../utilities/utilities.php');
 
 // select from command line the two databases to match
-$input = get_input("n:o:");
+$input = get_input("n:o:","u:p:");
 
 $new_db = $input['n'];
 $old_db = $input['o'];
 
+include('../utilities/config.php');
 // DBpedia basic url
 $dbpedia_url = "http://dbpedia.org/resource/";
 // connect to the database tabResponsabilita to extract names
-
-$conn = mysqlconnect("root", NULL);
 
 // retrieve new IDs
 $query = "SELECT * FROM $new_db.tabResponsabilita AS new WHERE new.IDResponsabilita > 
