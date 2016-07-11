@@ -6,7 +6,7 @@
 
 // These scripts are contained in the repository templates (in a separate Git)
 include('../../templates/php/utilities/utilities.php');
-
+/*
 function print_help()
 {
 	echo "dbpedia_filter_classes.php\n";
@@ -16,6 +16,8 @@ function print_help()
 $input = get_input("n:", "u:p:");
 
 $new_db = $input['n'];
+include('../utilities/config.php');
+*/
 
 $classes = array(
 	"yago:Lawyer110249950",
@@ -34,7 +36,9 @@ $classes = array(
 
 $sparql_endpoint = "http://dbpedia.org/sparql?query=";
 
-include('../utilities/config.php');
+include('../utilities/filter_read_and_connect.php');
+
+
 // connect to the db to take the urls to be checked
 $qr = mysqli_query($conn, "SELECT * FROM $new_db.tabDBPedia WHERE Filtered = 'TOBECHECKED'");
 if($qr != false && mysqli_num_rows($qr) > 0)

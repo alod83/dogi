@@ -5,13 +5,8 @@ include('../../templates/php/utilities/remote.php');
 include('../../templates/php/utilities/utilities.php');
 include('../utilities/utilities.php');
 
-// select from command line the two databases to match
-$input = get_input("n:o:","u:p:");
+include('../utilities/extract_read_and_connect.php');
 
-$new_db = $input['n'];
-$old_db = $input['o'];
-
-include('../utilities/config.php');
 // DBpedia basic url
 $dbpedia_url = "http://dbpedia.org/resource/";
 // connect to the database tabResponsabilita to extract names
