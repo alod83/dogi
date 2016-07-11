@@ -1,9 +1,13 @@
 <?php
 
+/*
+ * This script searches all the additional properties related to a person on VIAF.
+ * It assumes that all the VIAF IDs are already available.
+ */
 include('../../templates/php/utilities/utilities.php');
 include('../../templates/php/utilities/remote.php');
 
-
+// array of properties to be searched
 $properties = array(
 	"name",
 	"birthDate",
@@ -15,16 +19,16 @@ $properties = array(
 	"description"
 );
 	
+// read from input and connect to database
 include('../utilities/filter_read_and_connect.php');
 
 $q = "SELECT * FROM $new_db.tabVIAF WHERE checkProperties = '0' AND IDViaf NOT IN (SELECT IDViaf FROM $new_db.tabSameAsVIAF)";
 
-echo $q."\n";
-$arg = array('conn' => $conn, 'new_db'=> $new_db,'url' => 'http://viaf.org/viaf/', 'properties' => $properties);
+$arg = array('conn' => $conn, 'new_db'=> $new_db, 'properties' => $properties);
 mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 {
 	$sIDViaf = $aRow['IDViaf'];
-	$search_string = $arg['url'].$sIDViaf."/rdf.xml";
+	$search_string = "http://viaf.org/viaf/".$sIDViaf."/rdf.xml";
 	$conn = $arg['conn'];
 	$new_db = $arg['new_db'];
 	echo $search_string."\n";
