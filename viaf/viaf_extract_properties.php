@@ -70,5 +70,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 	}	 
 	mysqli_query($conn,"UPDATE $new_db.tabVIAF SET checkProperties = '1' WHERE IDViaf = '$sIDViaf'");
 });
-	
+
+mysqli_close($conn);
+
 ?>
