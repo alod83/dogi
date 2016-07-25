@@ -42,6 +42,10 @@ echo "Duplicating table tabOpereVIAF from $old_db to $new_db"
 mysql -u $user -p$password -e "USE $new_db; CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF;"; 
 echo "Done"
 
+echo "Duplicating table tabParole from $old_db to $new_db"
+mysql -u $user -p$password -e "USE $new_db; CREATE TABLE IF NOT EXISTS tabParole LIKE $old_db.tabParole;INSERT tabParole SELECT * FROM $old_db.tabParole;"; 
+echo "Done"
+
 # run viaf extractor to extract links
 echo "Extracting new URLs from VIAF"
 php viaf_extract_urls.php -o $old_db -n $new_db -u $user -p $password;
@@ -53,7 +57,7 @@ echo "Done"
 
 # run dbpedia filter to filter only to some classes
 echo "Filtering extracted URLs"
-#php dbpedia_filter_classes.php -n $new_db;
+php dogi_extract_tokens.php -o $old_db -n $new_db -u $user -p $password;
 
 
 # Remove all unfiltered links

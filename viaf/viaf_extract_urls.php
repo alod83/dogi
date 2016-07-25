@@ -10,14 +10,7 @@ include('../utilities/utilities.php');
  * Include file to read from command line and connect to database
  */
 include('../utilities/extract_read_and_connect.php');
-/*
-// select from command line the two databases to match
-$input = get_input("n:o:");
 
-$new_db = $input['n'];
-$old_db = $input['o'];
-
-$conn = mysqlconnect("root", NULL);*/
 $basic_url= "http://viaf.org/viaf/";
 $search_url = $basic_url."search?query=local.names=\"";
 	
