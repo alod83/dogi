@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;
 INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF; 
 CREATE TABLE IF NOT EXISTS tabParole LIKE $old_db.tabParole;
 INSERT tabParole SELECT * FROM $old_db.tabParole;
-CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;INSERT tabParoleVIAF; SELECT * FROM $old_db.tabParoleVIAF;"; 
+CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;INSERT tabParoleVIAF; SELECT * FROM $old_db.tabParoleVIAF;
 CREATE TABLE IF NOT EXISTS legParoleVIAF LIKE $old_db.legParoleVIAF;
 INSERT legParoleVIAF; SELECT * FROM $old_db.legParoleVIAF;"; 
 echo "Done"
@@ -63,7 +63,7 @@ mysql -u root -e "USE $new_db;
 DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND 
 tabVIAF.IDViaf NOT IN (SELECT DISTINCT tabVIAF.IDViaf FROM tabVariantiVIAF, tabResponsabilita,tabVIAF
 WHERE tabVariantiVIAF.IDViaf = tabVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = tabVIAF.IDResponsabilita
-AND tabVariantiVIAF.NomeAlternativo LIKE CONCAT(PrimoElemento,SecondoElemento));"
+AND tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%'));"
 
 # extract words from dogi titles
 php dogi_extract_tokens.php -o $old_db -n $new_db -u $user -p $password;
