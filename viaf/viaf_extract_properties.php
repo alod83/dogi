@@ -22,7 +22,7 @@ $properties = array(
 // read from input and connect to database
 include('../utilities/filter_read_and_connect.php');
 
-$q = "SELECT * FROM $new_db.tabVIAF WHERE checkProperties = '0' AND IDViaf NOT IN (SELECT IDViaf FROM $new_db.tabSameAsVIAF)";
+$q = "SELECT * FROM $new_db.tabVIAF WHERE checkProperties = '0' AND Filtered = 'TOBECHECKED'";
 
 $arg = array('conn' => $conn, 'new_db'=> $new_db, 'properties' => $properties);
 mysqlquery($conn,$q,$arg, function ($aRow, $arg)

@@ -62,7 +62,7 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		$filtered = "NO";
 		if($response == "true")
 			$filtered = "YES"; 
-		mysqli_query($conn, "UPDATE tabDBpedia SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
+		mysqli_query($conn, "UPDATE $new_db.tabDBpedia SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
 	}
 mysqli_close($conn);
 
