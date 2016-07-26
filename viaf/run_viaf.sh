@@ -42,9 +42,10 @@ CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;
 INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF; 
 CREATE TABLE IF NOT EXISTS tabParole LIKE $old_db.tabParole;
 INSERT tabParole SELECT * FROM $old_db.tabParole;
-CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;INSERT tabParoleVIAF; SELECT * FROM $old_db.tabParoleVIAF;
+CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;
+INSERT tabParoleVIAF SELECT * FROM $old_db.tabParoleVIAF;
 CREATE TABLE IF NOT EXISTS legParoleVIAF LIKE $old_db.legParoleVIAF;
-INSERT legParoleVIAF; SELECT * FROM $old_db.legParoleVIAF;"; 
+INSERT legParoleVIAF SELECT * FROM $old_db.legParoleVIAF;"; 
 echo "Done"
 
 # run viaf extractor to extract links
