@@ -21,7 +21,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 	echo $search_string."\n";
 	$oDOM = connect_DOM($search_string, false, "XML" );
 	
-	$oNodeList = XPATH($oDOM, "//ns2:work/ns2:title");
+	$oNodeList = XPATH($oDOM, "//ns1:work/ns1:title");
 	if($oNodeList)
 	{
 		foreach($oNodeList as $cNode)

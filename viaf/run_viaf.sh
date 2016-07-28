@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tabVIAF LIKE $old_db.tabVIAF;
 INSERT tabVIAF SELECT * FROM $old_db.tabVIAF; 
 CREATE TABLE IF NOT EXISTS tabSameAsVIAF LIKE $old_db.tabSameAsVIAF;
 INSERT tabSameAsVIAF SELECT * FROM $old_db.tabSameAsVIAF; 
-CREATE TABLE IF NOT EXISTS tabVariantiVIAF LIKE $old_db.tabSameAsVIAF;
+CREATE TABLE IF NOT EXISTS tabVariantiVIAF LIKE $old_db.tabVariantiVIAF;
 INSERT tabVariantiVIAF SELECT * FROM $old_db.tabVariantiVIAF; 
 CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;
 INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF; 
@@ -61,10 +61,10 @@ echo "Done"
 echo "Filtering extracted URLs"
 # TODO: remove from table people who do not match name and surname
 mysql -u root -e "USE $new_db;
-DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND 
-tabVIAF.IDViaf NOT IN (SELECT DISTINCT tabVIAF.IDViaf FROM tabVariantiVIAF, tabResponsabilita,tabVIAF
-WHERE tabVariantiVIAF.IDViaf = tabVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = tabVIAF.IDResponsabilita
-AND tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%'));"
+DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabvariantiviaf, tabResponsabilita WHERE tabVIAF.IDViaf = tabVariantiVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = tabVIAF.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
+DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
+DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
+DELETE FROM tabOpereVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF)"
 
 # extract words from dogi titles
 php dogi_extract_tokens.php -o $old_db -n $new_db -u $user -p $password;
@@ -72,9 +72,11 @@ php viaf_extract_tokens.php -o $old_db -n $new_db -u $user -p $password;
 
 # Remove all unfiltered links
 mysql -u root -e "USE $new_db;
-DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND IDViaf NOT IN (SELECT DISTINCT idViaf FROM `legParoleVIAF`,tabParoleVIAF WHERE legParoleVIAF.idToken = tabParoleVIAF.idToken AND tabParoleVIAF.valore IN (SELECT valore FROM tabParole WHERE quantita > 1000)); 
+DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT DISTINCT IDViaf FROM legParoleVIAF,tabParoleVIAF WHERE legParoleVIAF.idToken = tabParoleVIAF.idToken AND legParoleVIAF.IDViaf = tabVIAF.IDViaf AND tabParoleVIAF.valore IN (SELECT valore FROM tabParole WHERE quantita > 1000)); 
 DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
 DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
 DELETE FROM tabOpereVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
+DELETE FROM legParoleVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
+DELETE FROM tabParoleVIAF WHERE IDToken NOT IN (SELECT IDToken FROM legParoleVIAF);
 UPDATE tabVIAF SET Filtered = 'YES';"
 echo "Done"
