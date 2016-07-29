@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Creato il: Lug 29, 2016 alle 22:26
--- Versione del server: 10.1.13-MariaDB
--- Versione PHP: 5.5.35
+-- Creato il: Lug 29, 2016 alle 22:34
+-- Versione del server: 10.1.10-MariaDB
+-- Versione PHP: 7.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,19 +17,20 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `DoGi`
+-- Database: `dogi_2016_07_21`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `tabBPR`
+-- Struttura della tabella `tabbpr`
 --
 
 CREATE TABLE `tabBPR` (
   `IDRivista` varchar(6) CHARACTER SET utf8 DEFAULT NULL,
   `uri` varchar(52) CHARACTER SET utf8 DEFAULT NULL,
-  `title` varchar(95) CHARACTER SET utf8 DEFAULT NULL
+  `title` varchar(95) CHARACTER SET utf8 DEFAULT NULL,
+  `matchesatto` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
