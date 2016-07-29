@@ -33,41 +33,44 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 	$new_db = $arg['new_db'];
 	echo $search_string."\n";
 	$oDOM = connect_DOM($search_string, false, "XML" );
-			
+	
 	foreach($arg['properties'] as $sProperty)
 	{
 		$oNodeList = XPATH($oDOM, "//schema:".$sProperty);
-		foreach($oNodeList as $cNode)
+		if(!empty($oNodeList))
 		{
-			if(strcmp($sProperty,"sameAs/rdf:Description[@rdf:about]")==0)
+			foreach($oNodeList as $cNode)
 			{
-				foreach ( $cNode->attributes as $oAttribute )
+				if(strcmp($sProperty,"sameAs/rdf:Description[@rdf:about]")==0)
 				{
-					$sValue = $oAttribute->value;
-					mysqli_query($conn,"INSERT INTO $new_db.tabSameAsVIAF(IDViaf,SameAs) VALUES('$sIDViaf', '$sValue')");
-				}
-			}
-			else
-			{
-				$sValue = $cNode->nodeValue;
-				if(!empty($sValue))
-				{
-					switch($sProperty)
+					foreach ( $cNode->attributes as $oAttribute )
 					{
-						case 'name': 
-						case 'alternateName':
-						case 'givenName':
-						case 'familyName':
-							mysqli_query($conn, "INSERT INTO $new_db.tabVariantiVIAF(IDViaf,NomeAlternativo) VALUES('$sIDViaf', '$sValue')");
-							break;
-						default:
-							mysqli_query($conn,"UPDATE $new_db.tabVIAF SET $sProperty = '$sValue' WHERE IDViaf = '$sIDViaf'");
-							break;
-					}	
+						$sValue = $oAttribute->value;
+						mysqli_query($conn,"INSERT INTO $new_db.tabSameAsVIAF(IDViaf,SameAs) VALUES('$sIDViaf', '$sValue')");
+					}
+				}
+				else
+				{
+					$sValue = $cNode->nodeValue;
+					if(!empty($sValue))
+					{
+						switch($sProperty)
+						{
+							case 'name': 
+							case 'alternateName':
+							case 'givenName':
+							case 'familyName':
+								mysqli_query($conn, "INSERT INTO $new_db.tabVariantiVIAF(IDViaf,NomeAlternativo) VALUES('$sIDViaf', '$sValue')");
+								break;
+							default:
+								mysqli_query($conn,"UPDATE $new_db.tabVIAF SET $sProperty = '$sValue' WHERE IDViaf = '$sIDViaf'");
+								break;
+						}	
+					}
 				}
 			}
-		}
-	}	 
+		}	 
+	}
 	mysqli_query($conn,"UPDATE $new_db.tabVIAF SET checkProperties = '1' WHERE IDViaf = '$sIDViaf'");
 });
 
