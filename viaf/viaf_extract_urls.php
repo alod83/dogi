@@ -4,8 +4,6 @@
 include('../utilities/remote.php');
 include('../utilities/utilities.php');
 
-include('../utilities/utilities.php');
-
 /*
  * Include file to read from command line and connect to database
  */
