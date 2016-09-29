@@ -21,7 +21,6 @@ function build_query($old_db,$new_db,$t)
 	(SELECT IDResponsabilita FROM $new_db.$t)";
 }
 
-<?php
 
 /* Connection to a mysql database. This function returns 
  * the reference to the connection. */
@@ -106,6 +105,5 @@ function extract_tokens($sTitle)
 	return $aReturn;
 }
 
-?>
 
 ?>
