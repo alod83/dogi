@@ -2,7 +2,7 @@
 
 // read from input and connect to database
 include('../utilities/extract_read_and_connect.php');
-include('../../templates/php/utilities/stopwords_it.php');
+include('../utilities/stopwords_it.php');
 
 $q = "SELECT Testo FROM $new_db.tabTesti AS new WHERE new.IDTesto >
 	(SELECT MAX(IDTesto) FROM $old_db.tabTesti) AND Tipo = '0'";

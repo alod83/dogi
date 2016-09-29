@@ -4,8 +4,8 @@
  * This script searches all the additional properties related to a person on VIAF.
  * It assumes that all the VIAF IDs are already available.
  */
-include('../../templates/php/utilities/utilities.php');
-include('../../templates/php/utilities/remote.php');
+include('../utilities/utilities.php');
+include('../utilities/remote.php');
 
 // array of properties to be searched
 $properties = array(

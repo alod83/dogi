@@ -4,8 +4,8 @@
  * This script searches all the works related to a person on VIAF.
  * It assumes that all the VIAF IDs are already available.
  */
-include('../../templates/php/utilities/utilities.php');
-include('../../templates/php/utilities/remote.php');
+include('../utilities/utilities.php');
+include('../utilities/remote.php');
 
 // read from input and connect to database
 include('../utilities/filter_read_and_connect.php');

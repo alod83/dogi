@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script runs a complete linking to dbpedia
 # WARNING: This script works without mysql password. Modify to work with password 

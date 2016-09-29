@@ -1,8 +1,8 @@
 <?php
 	
 // These scripts are contained in the repository templates (in a separate Git)
-include('../../templates/php/utilities/remote.php');
-include('../../templates/php/utilities/utilities.php');
+include('../utilities/remote.php');
+include('../utilities/utilities.php');
 
 include('../utilities/utilities.php');
 
