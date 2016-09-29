@@ -39,7 +39,7 @@ echo "Done"
 echo "Filtering extracted URLs"
 # TODO: remove from table people who do not match name and surname
 mysql -u root $mysqlpassword -e "USE $new_db;
-DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabvariantiviaf, tabResponsabilita WHERE tabVIAF.IDViaf = tabVariantiVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = tabVIAF.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
+DELETE FROM tabVIAF WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabVariantiVIAF, tabResponsabilita WHERE tabVIAF.IDViaf = tabVariantiVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = tabVIAF.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
 DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
 DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF);
 DELETE FROM tabOpereVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM tabVIAF)"
