@@ -5,7 +5,7 @@
 
 source ../utilities/input.sh
 
-VIAF EXTRACTION AND FILTERING PROCEDURE"
+echo "VIAF EXTRACTION AND FILTERING PROCEDURE"
 
 # WARNING: set mysql password
 echo "Duplicating all tables from $old_db to $new_db"
