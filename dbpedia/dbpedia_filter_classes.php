@@ -5,7 +5,7 @@
  */
 
 // These scripts are contained in the repository templates (in a separate Git)
-include('../../templates/php/utilities/utilities.php');
+include('../utilities/utilities.php');
 /*
 function print_help()
 {

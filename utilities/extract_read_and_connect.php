@@ -3,7 +3,7 @@
 /*
  * This script is used by all the linkers to read from command line and connect to mysql db
  */
-require_once('../../templates/php/utilities/utilities.php');
+require_once('../utilities/utilities.php');
 
 function print_help()
 {

@@ -1,6 +1,6 @@
 <?php 
 
-require_once('../../templates/php/utilities/utilities.php');
+require_once('../utilities/utilities.php');
 
 $user = "root";
 $password = "";

@@ -2,7 +2,7 @@
 
 // read from input and connect to database
 include('../utilities/extract_read_and_connect.php');
-include('../../templates/php/utilities/stopwords_it.php');
+include('../utilities/stopwords_it.php');
 
 
 	 
