@@ -19,4 +19,4 @@ php bpr_extract_urls.php -o $old_db -n $new_db -u $user $cpassword
 echo "Done" 
 
 # TODO visualize if there are exact matches
-echo "Number of non exact matches: " $(mysql -u $user $mysqlpassword -e "SELECT COUNT(*) FROM $old_db.BPR_riviste WHERE matchesatto = 0;")
+echo "Number of non exact matches: " $(mysql -u $user $mysqlpassword -e "SELECT COUNT(*) FROM $support_db.BPR_riviste WHERE matchesatto = 0;")
