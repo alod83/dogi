@@ -7,10 +7,10 @@ source ../utilities/input.sh
 
 echo "DBPEDIA EXTRACTION AND FILTERING PROCEDURE"
 
-# WARNING: set mysql password
-echo "Duplicating table tabDBpedia from $old_db to $new_db"
-mysql -u $user $mysqlpassword -e "USE $new_db; CREATE TABLE IF NOT EXISTS tabDBpedia LIKE $old_db.tabDBpedia;INSERT tabDBpedia SELECT * FROM $old_db.tabDBpedia;"; 
-echo "Done"
+# Commented, not necessary anymore, already done by the main script (not linking)
+#echo "Duplicating table DBpedia_autori from $old_db to $new_db"
+#mysql -u $user $mysqlpassword -e "USE $new_db; CREATE TABLE IF NOT EXISTS DBpedia_autori LIKE $old_db.DBpedia_autori;INSERT DBpedia_autori SELECT * FROM $old_db.DBpedia_autori;"; 
+#echo "Done"
 
 # run dbpedia extractor to extract links
 echo "Extracting new URLs from DBPedia"
@@ -19,10 +19,8 @@ echo "Done"
 
 # run dbpedia filter to filter only to some classes
 echo "Filtering extracted URLs"
-php dbpedia_filter_classes.php -n $new_db -u $user $cpassword
-
+php dbpedia_filter_classes.php -o $old_db -u $user $cpassword
 
 # Remove all unfiltered links
-# WARNING: set mysql password
-mysql -u $user $mysqlpassword -e "USE $new_db; DELETE FROM tabDBpedia WHERE Filtered = 'NO';"; 
+mysql -u $user $mysqlpassword -e "USE $old_db; DELETE FROM DBpedia_autori WHERE Filtered = 'NO';"; 
 echo "Done"

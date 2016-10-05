@@ -6,7 +6,7 @@ include('../utilities/stopwords_it.php');
 
 
 	 
- function fSearch($conn, $new_db,$sSearchString, $sIDRivista, $bMatch = false)
+ function fSearch($conn, $old_db,$sSearchString, $sIDRivista, $bMatch = false)
  {
  	$sBasicURL = "http://dati.camera.it/sparql?query=";
  	$aResult = array();
@@ -25,26 +25,33 @@ include('../utilities/stopwords_it.php');
 		return false;
 	$sBPR = $aResult['url'];
 	$sBPRTitle = $aResult['title'];
-	mysqli_query($conn, "INSERT INTO $new_db.tabBPR(IDRivista,uri,title,matchesatto) VALUES('$sIDRivista', '$sBPR','$sBPRTitle','$bMatch')");
+	
+	// insert the found match in the DB
+	mysqli_query($conn, "INSERT INTO $old_db.BPR_riviste(IDRivista,uri,title,matchesatto) VALUES('$sIDRivista', '$sBPR','$sBPRTitle','$bMatch')");
 	return true;
  }
 
- $q = "SELECT * FROM $new_db.tabRiviste WHERE IDRivista NOT IN (SELECT IDRivista FROM $old_db.tabBPR)
+// select all the journals in the new db, which are not contained in the old db
+$q = "SELECT * FROM $new_db.tabRiviste WHERE IDRivista NOT IN (SELECT IDRivista FROM $old_db.BPR_riviste)
   AND IDRivista NOT IN (SELECT IDRivista FROM $old_db.tabRiviste)";
- $arg = array('conn' => $conn, 'new_db'=> $new_db, 'stopwords_it' => $stopwords_it);
- mysqlquery($conn,$q,$arg, function ($aRow, $arg)
+$arg = array('conn' => $conn, 'old_db'=> $old_db, 'stopwords_it' => $stopwords_it);
+
+// foreach selected journal, search if it is also in BPR
+mysqlquery($conn,$q,$arg, function ($aRow, $arg)
  {
  	$conn = $arg['conn'];
- 	$new_db = $arg['new_db'];
+ 	$old_db = $arg['old_db'];
  	$stopwords_it = $arg['stopwords_it'];
 	
  	$sTitle = $aRow['Titolo'];
 		
 	$sSearchString = urlencode("select  ?url ?title where {?url dc:title \"$sTitle\"; dc:type \"periodico\"; dc:title ?title .}");
 	$sIDRivista = $aRow['IDRivista'];
-	if(!fSearch($conn,$new_db,$sSearchString,$sIDRivista, true))
+	
+	// search the exact match, if there is not the exact match, search for a similar match
+	if(!fSearch($conn,$old_db,$sSearchString,$sIDRivista, true))
 	{
-		// cerco il match non esatto
+		// search for the non exact match
 		// remove articles
 		$aTokens = explode(" ", $sTitle);
 		$sNormalizedTitle = "";
@@ -59,10 +66,9 @@ include('../utilities/stopwords_it.php');
 		echo $sNormalizedTitle."\n";
 		$sSearchString = urlencode("select  ?url ?title where {?url dc:title ?title; dc:type \"periodico\" .
 		FILTER regex(str(?title),\"$sNormalizedTitle\", \"i\") }");
-		fSearch($conn,$new_db,$sSearchString,$sIDRivista);
+		fSearch($conn,$old_db,$sSearchString,$sIDRivista);
 		
 	}
-			//mysqli_query($conn, "UPDATE tabRiviste SET BPR= 1 WHERE IDRivista = '$iIDRivista'");
 });
 
 mysqli_close($conn);

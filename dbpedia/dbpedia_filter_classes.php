@@ -4,20 +4,8 @@
  * to the juridical field.
  */
 
-// These scripts are contained in the repository templates (in a separate Git)
 include('../utilities/utilities.php');
-/*
-function print_help()
-{
-	echo "dbpedia_filter_classes.php\n";
-	echo "-n new database\n";
-}
-// select from command line the two databases to match
-$input = get_input("n:", "u:p:");
 
-$new_db = $input['n'];
-include('../utilities/config.php');
-*/
 
 $classes = array(
 	"yago:Lawyer110249950",
@@ -38,9 +26,8 @@ $sparql_endpoint = "http://dbpedia.org/sparql?query=";
 
 include('../utilities/filter_read_and_connect.php');
 
-
 // connect to the db to take the urls to be checked
-$qr = mysqli_query($conn, "SELECT * FROM $new_db.tabDBPedia WHERE Filtered = 'TOBECHECKED'");
+$qr = mysqli_query($conn, "SELECT * FROM $old_db.DBpedia_autori WHERE Filtered = 'TOBECHECKED'");
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))
 	{
@@ -62,7 +49,7 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		$filtered = "NO";
 		if($response == "true")
 			$filtered = "YES"; 
-		mysqli_query($conn, "UPDATE $new_db.tabDBpedia SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
+		mysqli_query($conn, "UPDATE $old_db.DBpedia_autori SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
 	}
 mysqli_close($conn);
 

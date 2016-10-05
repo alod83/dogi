@@ -12,7 +12,7 @@ $dbpedia_url = "http://dbpedia.org/resource/";
 // retrieve new IDs
 $query = "SELECT * FROM $new_db.tabResponsabilita AS new WHERE new.IDResponsabilita > 
 (SELECT MAX(IDResponsabilita) FROM $old_db.tabResponsabilita) AND new.IDResponsabilita NOT IN 
-(SELECT IDResponsabilita FROM $new_db.tabDBpedia)";
+(SELECT IDResponsabilita FROM $new_db.DBpedia_autori)";
 $qr = mysqli_query($conn, $query);
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))
@@ -26,9 +26,8 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		$http_response = intval($result['http_info']['http_code']);
 		if($http_response == 200) // the url exists
 		{
-			echo "Found URL $url\n";
-			// if it exists store the result in a new table, called tabDBpedia (id, URL)
-			mysqli_query($conn,"INSERT INTO $new_db.tabDBpedia(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
+			// if it exists store the result in a new table, called DBpedia_autori (id, URL)
+			mysqli_query($conn,"INSERT INTO $old_db.DBpedia_autori(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
 		}
 	}
 mysqli_close($conn);

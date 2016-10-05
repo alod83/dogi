@@ -2,13 +2,9 @@
 
 # This script runs a complete linking to dbpedia
 
-# WARNING: This script works without mysql password. Modify to work with password 
-user="root"
-password=""
+usage() { echo "USAGE: -o old_db -n new_db -u user -p password" ; exit 1; }
 
-usage() { echo "USAGE: -o old_db -n new_db": ; exit 1; }
-
-while getopts "o:n:" opt; do
+while getopts "o:n:u:p:" opt; do
 	case $opt in
  		o)
       		old_db=$OPTARG
@@ -16,20 +12,21 @@ while getopts "o:n:" opt; do
     		n)
       		new_db=$OPTARG
       		;;
+      	u)
+      		user=$OPTARG
+      		;;
+      	p)
+      		password=$OPTARG
+      		;;
     		*)
       		usage
       		;;
   esac
 done
 
-if [ -z "${old_db}" ] || [ -z "${new_db}" ]; then
+if [ -z "${old_db}" ] || [ -z "${new_db}" ] || [ -z "${user}" ] || [ -z "${password}" ]; then
     usage
 fi
 
 cpassword="-p $password"
 mysqlpassword="-p$password"
-if [[  -z  $password  ]]; then
-	cpassword=""
-	mysqlpassword=""
-fi
-
