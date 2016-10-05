@@ -49,7 +49,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 	$sIDRivista = $aRow['IDRivista'];
 	
 	// search the exact match, if there is not the exact match, search for a similar match
-	if(!fSearch($conn,$old_db,$sSearchString,$sIDRivista, true))
+	if(!fSearch($conn,$support_db,$sSearchString,$sIDRivista, true))
 	{
 		// search for the non exact match
 		// remove articles
@@ -66,7 +66,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 		echo $sNormalizedTitle."\n";
 		$sSearchString = urlencode("select  ?url ?title where {?url dc:title ?title; dc:type \"periodico\" .
 		FILTER regex(str(?title),\"$sNormalizedTitle\", \"i\") }");
-		fSearch($conn,$old_db,$sSearchString,$sIDRivista);
+		fSearch($conn,$support_db,$sSearchString,$sIDRivista);
 		
 	}
 });
