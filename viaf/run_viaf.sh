@@ -6,24 +6,24 @@
 source ../utilities/input.sh
 
 echo "VIAF EXTRACTION AND FILTERING PROCEDURE"
-
-echo "Duplicating all tables from $old_db to $new_db"
-mysql -u $user $mysqlpassword -e "USE $new_db; 
-CREATE TABLE IF NOT EXISTS VIAF_autori LIKE $old_db.VIAF_autori;
-INSERT VIAF_autori SELECT * FROM $old_db.VIAF_autori; 
-CREATE TABLE IF NOT EXISTS tabSameAsVIAF LIKE $old_db.tabSameAsVIAF;
-INSERT tabSameAsVIAF SELECT * FROM $old_db.tabSameAsVIAF; 
-CREATE TABLE IF NOT EXISTS tabVariantiVIAF LIKE $old_db.tabVariantiVIAF;
-INSERT tabVariantiVIAF SELECT * FROM $old_db.tabVariantiVIAF; 
-CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;
-INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF; 
-CREATE TABLE IF NOT EXISTS tabParole LIKE $old_db.tabParole;
-INSERT tabParole SELECT * FROM $old_db.tabParole;
-CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;
-INSERT tabParoleVIAF SELECT * FROM $old_db.tabParoleVIAF;
-CREATE TABLE IF NOT EXISTS legParoleVIAF LIKE $old_db.legParoleVIAF;
-INSERT legParoleVIAF SELECT * FROM $old_db.legParoleVIAF;"; 
-echo "Done"
+# Commented, not necessary anymore, already done by the main script (not linking)
+#echo "Duplicating all tables from $old_db to $new_db"
+#mysql -u $user $mysqlpassword -e "USE $new_db; 
+#CREATE TABLE IF NOT EXISTS VIAF_autori LIKE $old_db.VIAF_autori;
+#INSERT VIAF_autori SELECT * FROM $old_db.VIAF_autori; 
+#CREATE TABLE IF NOT EXISTS tabSameAsVIAF LIKE $old_db.tabSameAsVIAF;
+#INSERT tabSameAsVIAF SELECT * FROM $old_db.tabSameAsVIAF; 
+#CREATE TABLE IF NOT EXISTS tabVariantiVIAF LIKE $old_db.tabVariantiVIAF;
+#INSERT tabVariantiVIAF SELECT * FROM $old_db.tabVariantiVIAF; 
+#CREATE TABLE IF NOT EXISTS tabOpereVIAF LIKE $old_db.tabOpereVIAF;
+#INSERT tabOpereVIAF SELECT * FROM $old_db.tabOpereVIAF; 
+#CREATE TABLE IF NOT EXISTS tabParole LIKE $old_db.tabParole;
+#INSERT tabParole SELECT * FROM $old_db.tabParole;
+#CREATE TABLE IF NOT EXISTS tabParoleVIAF LIKE $old_db.tabParoleVIAF;
+#INSERT tabParoleVIAF SELECT * FROM $old_db.tabParoleVIAF;
+#CREATE TABLE IF NOT EXISTS legParoleVIAF LIKE $old_db.legParoleVIAF;
+#INSERT legParoleVIAF SELECT * FROM $old_db.legParoleVIAF;"; 
+#echo "Done"
 
 # run viaf extractor to extract links
 echo "Extracting new URLs from VIAF"
