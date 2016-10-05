@@ -22,15 +22,15 @@ $properties = array(
 // read from input and connect to database
 include('../utilities/filter_read_and_connect.php');
 
-$q = "SELECT * FROM $old_db.VIAF_autori WHERE checkProperties = '0' AND Filtered = 'TOBECHECKED'";
+$q = "SELECT * FROM $support_db.VIAF_autori WHERE checkProperties = '0' AND Filtered = 'TOBECHECKED'";
 
-$arg = array('conn' => $conn, 'old_db'=> $old_db, 'properties' => $properties);
+$arg = array('conn' => $conn, 'support_db'=> $support_db, 'properties' => $properties);
 mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 {
 	$sIDViaf = $aRow['IDViaf'];
 	$search_string = "http://viaf.org/viaf/".$sIDViaf."/rdf.xml";
 	$conn = $arg['conn'];
-	$old_db = $arg['old_db'];
+	$support_db = $arg['support_db'];
 	echo $search_string."\n";
 	$oDOM = connect_DOM($search_string, false, "XML" );
 	
@@ -46,7 +46,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 					foreach ( $cNode->attributes as $oAttribute )
 					{
 						$sValue = $oAttribute->value;
-						mysqli_query($conn,"INSERT INTO $old_db.tabSameAsVIAF(IDViaf,SameAs) VALUES('$sIDViaf', '$sValue')");
+						mysqli_query($conn,"INSERT INTO $support_db.tabSameAsVIAF(IDViaf,SameAs) VALUES('$sIDViaf', '$sValue')");
 					}
 				}
 				else
@@ -60,10 +60,10 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 							case 'alternateName':
 							case 'givenName':
 							case 'familyName':
-								mysqli_query($conn, "INSERT INTO $old_db.tabVariantiVIAF(IDViaf,NomeAlternativo) VALUES('$sIDViaf', '$sValue')");
+								mysqli_query($conn, "INSERT INTO $support_db.tabVariantiVIAF(IDViaf,NomeAlternativo) VALUES('$sIDViaf', '$sValue')");
 								break;
 							default:
-								mysqli_query($conn,"UPDATE $old_db.VIAF_autori SET $sProperty = '$sValue' WHERE IDViaf = '$sIDViaf'");
+								mysqli_query($conn,"UPDATE $support_db.VIAF_autori SET $sProperty = '$sValue' WHERE IDViaf = '$sIDViaf'");
 								break;
 						}	
 					}
@@ -71,7 +71,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 			}
 		}	 
 	}
-	mysqli_query($conn,"UPDATE $old_db.VIAF_autori SET checkProperties = '1' WHERE IDViaf = '$sIDViaf'");
+	mysqli_query($conn,"UPDATE $support_db.VIAF_autori SET checkProperties = '1' WHERE IDViaf = '$sIDViaf'");
 });
 
 mysqli_close($conn);

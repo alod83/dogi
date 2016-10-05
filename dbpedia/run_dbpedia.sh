@@ -19,8 +19,8 @@ echo "Done"
 
 # run dbpedia filter to filter only to some classes
 echo "Filtering extracted URLs"
-php dbpedia_filter_classes.php -o $old_db -u $user $cpassword
+php dbpedia_filter_classes.php -u $user $cpassword
 
 # Remove all unfiltered links
-mysql -u $user $mysqlpassword -e "USE $old_db; DELETE FROM DBpedia_autori WHERE Filtered = 'NO';"; 
+mysql -u $user $mysqlpassword -e "USE $support_db; DELETE FROM DBpedia_autori WHERE Filtered = 'NO';"; 
 echo "Done"

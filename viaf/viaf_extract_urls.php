@@ -13,13 +13,13 @@ $basic_url= "http://viaf.org/viaf/";
 $search_url = $basic_url."search?query=local.names=\"";
 	
 $q = build_query($old_db,$new_db,"VIAF_autori");
-$arg = array('conn' => $conn, 'old_db'=> $old_db, 'su' => $search_url);
+$arg = array('conn' => $conn, 'support_db'=> $support_db, 'su' => $search_url);
 
 mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 {
 	$search_url = $arg['su'];
 	$conn = $arg['conn'];
-	$old_db = $arg['old_db'];
+	$support_db = $arg['support_db'];
 	$sSearchString = urlencode(trim($aRow['PrimoElemento'])." ".trim($aRow['SecondoElemento']))."\"";
 	echo $search_url.$sSearchString."\n";
 	$oCh = curl_init();
@@ -42,7 +42,7 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 			{
 				$sViafId = substr($oAttribute->value, strlen("/viaf/"), strpos($oAttribute->value, "#")-strlen('/viaf/')-1);
 				echo $sViafId."\n";
-				mysqli_query($conn, "INSERT INTO $old_db.VIAF_autori(IDResponsabilita,IDViaf) VALUES('$iIDResponsabilita', '$sViafId')");
+				mysqli_query($conn, "INSERT INTO $support_db.VIAF_autori(IDResponsabilita,IDViaf) VALUES('$iIDResponsabilita', '$sViafId')");
 			}
 			break;
 		}

@@ -8,15 +8,12 @@ require_once('../utilities/utilities.php');
 function print_help()
 {
 	echo "USAGE\n";
-	echo "-n old_db\n";
 	echo "-u user\n";
 	echo "-p password\n";
 }
 
 // select from command line the database where to operate
-$input = get_input("o:","u:p:");
-
-$old_db = $input['o'];
+$input = get_input("u:p:");
 
 include('../utilities/config.php');
 ?>

@@ -27,7 +27,7 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		if($http_response == 200) // the url exists
 		{
 			// if it exists store the result in a new table, called DBpedia_autori (id, URL)
-			mysqli_query($conn,"INSERT INTO $old_db.DBpedia_autori(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
+			mysqli_query($conn,"INSERT INTO $support_db.DBpedia_autori(IDResponsabilita,DBpediaURL) VALUES('$id','$url')");
 		}
 	}
 mysqli_close($conn);

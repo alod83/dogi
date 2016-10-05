@@ -10,12 +10,12 @@ include('../utilities/remote.php');
 // read from input and connect to database
 include('../utilities/filter_read_and_connect.php');
 
-$q = "SELECT * FROM $old_db.VIAF_autori WHERE checkOpere = '0' AND Filtered = 'TOBECHECKED'";
-$arg = array('conn' => $conn, 'old_db'=> $old_db);
+$q = "SELECT * FROM $support_db.VIAF_autori WHERE checkOpere = '0' AND Filtered = 'TOBECHECKED'";
+$arg = array('conn' => $conn, 'support_db'=> $support_db);
 mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 {
 	$sIDViaf = $aRow['IDViaf'];
-	$old_db = $arg['old_db'];
+	$support_db = $arg['support_db'];
 	$conn = $arg['conn'];
 	$search_string = "http://viaf.org/viaf/".$sIDViaf."/viaf.xml";
 	echo $search_string."\n";
@@ -29,11 +29,11 @@ mysqlquery($conn,$q,$arg, function ($aRow, $arg)
 			$sValue = mysqli_escape_string($conn,$cNode->nodeValue);
 			if(!empty($sValue))
 			{
-				mysqli_query($conn, "INSERT INTO $old_db.tabOpereVIAF(IDViaf,Titolo) VALUES('$sIDViaf', '$sValue')");
+				mysqli_query($conn, "INSERT INTO $support_db.tabOpereVIAF(IDViaf,Titolo) VALUES('$sIDViaf', '$sValue')");
 			}
 		}
 	}
-	mysqli_query($conn,"UPDATE $old_db.VIAF_autori SET checkOpere = '1' WHERE IDViaf = '$sIDViaf'");
+	mysqli_query($conn,"UPDATE $support_db.VIAF_autori SET checkOpere = '1' WHERE IDViaf = '$sIDViaf'");
 	
 });
 

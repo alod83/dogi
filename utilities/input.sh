@@ -30,3 +30,4 @@ fi
 
 cpassword="-p $password"
 mysqlpassword="-p$password"
+support_db="dogi_support"

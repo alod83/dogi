@@ -37,7 +37,7 @@ echo "Done"
 # run dbpedia filter to filter only to some classes
 echo "Filtering extracted URLs"
 # TODO: remove from table people who do not match name and surname
-mysql -u $user $mysqlpassword -e "USE $new_db;
+mysql -u $user $mysqlpassword -e "USE $support_db;
 DELETE FROM VIAF_autori WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabVariantiVIAF, tabResponsabilita WHERE VIAF_autori.IDViaf = tabVariantiVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = VIAF_autori.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
 DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);
 DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);
@@ -45,10 +45,10 @@ DELETE FROM tabOpereVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori)"
 
 # extract words from dogi titles
 php dogi_extract_tokens.php -o $old_db -n $new_db -u $user $cpassword;
-php viaf_extract_tokens.php -n $new_db -u $user $cpassword;
+php viaf_extract_tokens.php -u $user $cpassword;
 
 # Remove all unfiltered links
-mysql -u $user $mysqlpassword -e "USE $new_db;
+mysql -u $user $mysqlpassword -e "USE $support_db;
 DELETE FROM VIAF_autori WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT DISTINCT IDViaf FROM legParoleVIAF,tabParoleVIAF WHERE legParoleVIAF.idToken = tabParoleVIAF.idToken AND legParoleVIAF.IDViaf = VIAF_autori.IDViaf AND tabParoleVIAF.valore IN (SELECT valore FROM tabParole WHERE quantita > 1000)); 
 DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);
 DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);

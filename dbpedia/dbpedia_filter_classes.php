@@ -27,7 +27,7 @@ $sparql_endpoint = "http://dbpedia.org/sparql?query=";
 include('../utilities/filter_read_and_connect.php');
 
 // connect to the db to take the urls to be checked
-$qr = mysqli_query($conn, "SELECT * FROM $old_db.DBpedia_autori WHERE Filtered = 'TOBECHECKED'");
+$qr = mysqli_query($conn, "SELECT * FROM $support_db.DBpedia_autori WHERE Filtered = 'TOBECHECKED'");
 if($qr != false && mysqli_num_rows($qr) > 0)
 	while($row = mysqli_fetch_assoc($qr))
 	{
@@ -49,7 +49,7 @@ if($qr != false && mysqli_num_rows($qr) > 0)
 		$filtered = "NO";
 		if($response == "true")
 			$filtered = "YES"; 
-		mysqli_query($conn, "UPDATE $old_db.DBpedia_autori SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
+		mysqli_query($conn, "UPDATE $support_db.DBpedia_autori SET Filtered='$filtered' WHERE DBpediaURL='$dbpedia_url'");
 	}
 mysqli_close($conn);
 
