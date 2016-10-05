@@ -29,16 +29,16 @@ echo "VIAF EXTRACTION AND FILTERING PROCEDURE"
 echo "Extracting new URLs from VIAF"
 php viaf_extract_urls.php -o $old_db -n $new_db -u $user $cpassword;
 echo "Extracting Properties from VIAF"
-php viaf_extract_properties.php -n $new_db -u $user $cpassword;
+php viaf_extract_properties.php -u $user $cpassword;
 echo "Extracting Works from VIAF"
-php viaf_extract_works.php -n $new_db -u $user $cpassword;
+php viaf_extract_works.php -u $user $cpassword;
 echo "Done"
 
 # run dbpedia filter to filter only to some classes
 echo "Filtering extracted URLs"
 # TODO: remove from table people who do not match name and surname
 mysql -u $user $mysqlpassword -e "USE $support_db;
-DELETE FROM VIAF_autori WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabVariantiVIAF, tabResponsabilita WHERE VIAF_autori.IDViaf = tabVariantiVIAF.IDViaf AND tabResponsabilita.IDResponsabilita = VIAF_autori.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
+DELETE FROM VIAF_autori WHERE Filtered = 'TOBECHECKED' AND NOT EXISTS (SELECT IDViaf FROM tabVariantiVIAF, tabResponsabilita WHERE VIAF_autori.IDViaf = tabVariantiVIAF.IDViaf AND $new_db.tabResponsabilita.IDResponsabilita = VIAF_autori.IDResponsabilita AND (tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%', PrimoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',SecondoElemento,'%') OR tabVariantiVIAF.NomeAlternativo LIKE CONCAT('%',PrimoElemento,'%')));
 DELETE FROM tabVariantiVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);
 DELETE FROM tabSameAsVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori);
 DELETE FROM tabOpereVIAF WHERE IDViaf NOT IN (SELECT IDViaf FROM VIAF_autori)"
