@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Creato il: Lug 29, 2016 alle 22:25
+-- Creato il: Lug 29, 2016 alle 11:35
 -- Versione del server: 10.1.13-MariaDB
 -- Versione PHP: 5.5.35
 
@@ -23,14 +23,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `tabdbpedia`
+-- Struttura della tabella `tabviaf`
 --
 
-CREATE TABLE `tabDbpedia` (
-  `IDResponsabilita` mediumint(8) NOT NULL,
-  `DBpediaURL` text NOT NULL,
-  `Filtered` enum('YES','NO','TOBECHECKED') NOT NULL DEFAULT 'TOBECHECKED'
+CREATE TABLE `VIAF_autori` (
+  `IDResponsabilita` int(11) NOT NULL,
+  `IDViaf` varchar(30) NOT NULL,
+  `URLViaf` varchar(50) NOT NULL,
+  `birthDate` int(11) NOT NULL,
+  `deathDate` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `checkProperties` tinyint(1) NOT NULL,
+  `checkOpere` tinyint(1) NOT NULL,
+  `Filtered` enum('TOBECHECKED','YES','NO') NOT NULL DEFAULT 'TOBECHECKED'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indici per le tabelle scaricate
+--
+
+--
+-- Indici per le tabelle `tabviaf`
+--
+ALTER TABLE `tabviaf`
+  ADD PRIMARY KEY (`IDViaf`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Struttura della tabella `tabbpr`
 --
 
-CREATE TABLE `tabBPR` (
+CREATE TABLE `BPR_riviste` (
   `IDRivista` varchar(6) CHARACTER SET utf8 DEFAULT NULL,
   `uri` varchar(52) CHARACTER SET utf8 DEFAULT NULL,
   `title` varchar(95) CHARACTER SET utf8 DEFAULT NULL,
