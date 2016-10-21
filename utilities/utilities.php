@@ -18,7 +18,7 @@ function build_query($old_db,$new_db,$t)
 {
 	return "SELECT * FROM $new_db.tabResponsabilita AS new WHERE new.IDResponsabilita >
 	(SELECT MAX(IDResponsabilita) FROM $old_db.tabResponsabilita) AND new.IDResponsabilita NOT IN
-	(SELECT IDResponsabilita FROM $new_db.$t)";
+	(SELECT IDResponsabilita FROM $old_db.$t)";
 }
 
 
